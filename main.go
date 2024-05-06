@@ -26,15 +26,19 @@ func (hm *HandlerMatcher) tryMatch(w http.ResponseWriter,
 	handler(w, r)
 }
 
+func newMatcher() HandlerMatcher {
+	return HandlerMatcher{
+		handlers: map[string]func(http.ResponseWriter, *http.Request){},
+	}
+}
+
 func home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.String() != "/" {
 		http.Error(w, "Not Found!", 404)
 		return
 	}
 
-	hm := HandlerMatcher{
-		handlers: make(map[string]func(http.ResponseWriter, *http.Request)),
-	}
+	hm := newMatcher()
 
 	hm.register(http.MethodGet, func(wr http.ResponseWriter,
 		r *http.Request) {
@@ -45,9 +49,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func search(w http.ResponseWriter, r *http.Request) {
-	hm := HandlerMatcher{
-		handlers: make(map[string]func(http.ResponseWriter, *http.Request)),
-	}
+	hm := newMatcher()
 
 	hm.register(http.MethodGet, func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Placheolder for search page"))
@@ -62,9 +64,7 @@ func viewPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hm := HandlerMatcher{
-		handlers: map[string]func(http.ResponseWriter, *http.Request){},
-	}
+	hm := newMatcher()
 
 	hm.register(http.MethodGet, func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Placholder for blog post page"))
@@ -85,11 +85,33 @@ func viewPost(w http.ResponseWriter, r *http.Request) {
 	hm.tryMatch(w, r)
 }
 
+func login(w http.ResponseWriter, r *http.Request) {
+	hm := newMatcher()
+
+	hm.register(http.MethodGet, func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Placeholder for login a user"))
+	})
+
+	hm.tryMatch(w, r)
+}
+
+func register(w http.ResponseWriter, r *http.Request) {
+	hm := newMatcher()
+
+	hm.register(http.MethodPost, func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Placeholder for registering a new user"))
+	})
+
+	hm.tryMatch(w, r)
+}
+
 func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", home)
 	mux.HandleFunc("/search", search)
 	mux.HandleFunc("/post/", viewPost)
+	mux.HandleFunc("/login", login)
+	mux.HandleFunc("/register", register)
 
 	err := http.ListenAndServe(hostPort, mux)
 	log.Fatal(err)

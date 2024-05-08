@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"html/template"
-	"log"
 	"net/http"
 )
 
@@ -32,7 +31,7 @@ func newMatcher() HandlerMatcher {
 	}
 }
 
-func home(w http.ResponseWriter, r *http.Request) {
+func (a *app) home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.String() != "/" {
 		http.Error(w, "Not Found!", 404)
 		return
@@ -44,7 +43,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 		r *http.Request) {
 		ts, err := template.ParseFiles("./ui/html/base.html")
 		if err != nil {
-			log.Print(err)
+			a.errorLog.Print(err)
 			http.Error(w, "Internal server error", 500)
 			return
 		}
@@ -54,7 +53,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 	hm.tryMatch(w, r)
 }
 
-func search(w http.ResponseWriter, r *http.Request) {
+func (a *app) search(w http.ResponseWriter, r *http.Request) {
 	hm := newMatcher()
 
 	hm.register(http.MethodGet, func(w http.ResponseWriter, r *http.Request) {
@@ -65,7 +64,7 @@ func search(w http.ResponseWriter, r *http.Request) {
 	hm.tryMatch(w, r)
 }
 
-func viewPost(w http.ResponseWriter, r *http.Request) {
+func (a *app) viewPost(w http.ResponseWriter, r *http.Request) {
 	if r.URL.String() != "/post" {
 		http.Error(w, "Not Found!", 404)
 		return
@@ -95,7 +94,7 @@ func viewPost(w http.ResponseWriter, r *http.Request) {
 	hm.tryMatch(w, r)
 }
 
-func login(w http.ResponseWriter, r *http.Request) {
+func (a *app) login(w http.ResponseWriter, r *http.Request) {
 	hm := newMatcher()
 
 	hm.register(http.MethodGet, func(w http.ResponseWriter, r *http.Request) {
@@ -105,7 +104,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	hm.tryMatch(w, r)
 }
 
-func register(w http.ResponseWriter, r *http.Request) {
+func (a *app) register(w http.ResponseWriter, r *http.Request) {
 	hm := newMatcher()
 
 	hm.register(http.MethodPost, func(w http.ResponseWriter, r *http.Request) {

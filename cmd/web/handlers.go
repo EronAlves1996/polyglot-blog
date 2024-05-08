@@ -75,7 +75,10 @@ func viewPost(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Placholder for blog post page"))
 	})
 
+	// create a post
 	hm.register(http.MethodPost, func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusCreated)
+		w.Header().Add("Location", "/fake/location")
 		w.Write([]byte("Placeholder for creating blog post page"))
 	})
 
@@ -104,6 +107,8 @@ func register(w http.ResponseWriter, r *http.Request) {
 	hm := newMatcher()
 
 	hm.register(http.MethodPost, func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusCreated)
+		w.Header().Add("Location", "/fake/location")
 		w.Write([]byte("Placeholder for registering a new user"))
 	})
 

@@ -1,13 +1,15 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 )
 
-var hostPort = ":4000"
-
 func main() {
+	addr := flag.String("addr", ":4000", "Port where server gonna listen. Default: ':4000'")
+	flag.Parse()
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", home)
 	mux.HandleFunc("/search", search)
@@ -15,6 +17,6 @@ func main() {
 	mux.HandleFunc("/login", login)
 	mux.HandleFunc("/register", register)
 
-	err := http.ListenAndServe(hostPort, mux)
+	err := http.ListenAndServe(*addr, mux)
 	log.Fatal(err)
 }

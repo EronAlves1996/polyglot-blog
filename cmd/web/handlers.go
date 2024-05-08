@@ -1,6 +1,10 @@
 package main
 
-import "net/http"
+import (
+	"html/template"
+	"log"
+	"net/http"
+)
 
 type HandlerMatcher struct {
 	handlers map[string]func(http.ResponseWriter, *http.Request)
@@ -37,7 +41,13 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 	hm.register(http.MethodGet, func(wr http.ResponseWriter,
 		r *http.Request) {
-		w.Write([]byte("Placeholder for home page"))
+		ts, err := template.ParseFiles("./ui/html/base.html")
+		if err != nil {
+			log.Print(err)
+			http.Error(w, "Internal server error", 500)
+			return
+		}
+		ts.Execute(w, nil)
 	})
 
 	hm.tryMatch(w, r)

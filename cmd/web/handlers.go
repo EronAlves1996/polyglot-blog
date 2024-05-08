@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -57,7 +58,8 @@ func search(w http.ResponseWriter, r *http.Request) {
 	hm := newMatcher()
 
 	hm.register(http.MethodGet, func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Placheolder for search page"))
+		query := r.URL.Query().Get("s")
+		w.Write([]byte(fmt.Sprintf("Placheolder for search page, searching %s", query)))
 	})
 
 	hm.tryMatch(w, r)

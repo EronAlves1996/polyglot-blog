@@ -43,8 +43,7 @@ func (a *app) home(w http.ResponseWriter, r *http.Request) {
 		r *http.Request) {
 		ts, err := template.ParseFiles("./ui/html/base.html")
 		if err != nil {
-			a.errorLog.Print(err)
-			http.Error(w, "Internal server error", 500)
+			a.internalServerError(err, wr)
 			return
 		}
 		ts.Execute(w, nil)

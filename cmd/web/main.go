@@ -21,16 +21,9 @@ func main() {
 		infoLog:  log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime),
 	}
 
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", app.home)
-	mux.HandleFunc("/search", app.search)
-	mux.HandleFunc("/post/", app.viewPost)
-	mux.HandleFunc("/login", app.login)
-	mux.HandleFunc("/register", app.register)
-
 	srv := &http.Server{
 		Addr:     *addr,
-		Handler:  mux,
+		Handler:  app.routes(),
 		ErrorLog: app.errorLog,
 	}
 

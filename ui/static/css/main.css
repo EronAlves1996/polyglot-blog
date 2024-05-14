@@ -2,11 +2,16 @@
   --bg: #C1C1C1;
   --strong: #171225;
   --link-visited: #4f3eff;
+  --borders: #736B92;
+  --text: #211a35;
 }
 
 * {
   margin: 0;
   padding: 0;
+  font-family: "Raleway", sans-serif;
+  font-weight: 500;
+  font-style: normal;
 }
 
 body {
@@ -14,6 +19,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  color: var(--text);
 }
 
 header,
@@ -56,4 +62,24 @@ a:visited {
 .form-field {
   display: flex;
   flex-direction: column;
+  gap: 0.2rem;
+}
+
+.form-field>input,
+.form-field>textarea {
+  border-radius: 5px;
+  border-color: var(--borders);
+  border-width: 2px;
+  border-style: solid;
+  padding: 0.5rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-field>input::placeholder {
+  color: var(--borders);
 }

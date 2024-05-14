@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -88,6 +89,42 @@ func (a *app) viewPost(w http.ResponseWriter, r *http.Request) {
 
 	hm.register(http.MethodDelete, func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Placeholder for deleting a blog post"))
+	})
+
+	hm.tryMatch(w, r)
+}
+
+type NewPostTemplateData struct {
+	Title string
+}
+
+func (a *app) newPost(w http.ResponseWriter, r *http.Request) {
+	hm := newMatcher()
+
+	hm.register(http.MethodGet, func(w http.ResponseWriter, r *http.Request) {
+		files := []string{
+			"./ui/html/base.html",
+			"./ui/html/new-post.html",
+		}
+
+		ts, err := template.ParseFiles(files...)
+		if err != nil {
+			a.serverError(err, w)
+			return
+		}
+
+		bf := new(bytes.Buffer)
+
+		td := NewPostTemplateData{
+			Title: "Novo Post",
+		}
+
+		if err := ts.ExecuteTemplate(bf, "base", td); err != nil {
+			a.serverError(err, w)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+		bf.WriteTo(w)
 	})
 
 	hm.tryMatch(w, r)

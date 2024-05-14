@@ -1,0 +1,59 @@
+:root {
+  --bg: #C1C1C1;
+  --strong: #171225;
+  --link-visited: #4f3eff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header,
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+main {
+  flex: 1 0 auto;
+  padding: 1.5rem 0;
+  min-width: 60%;
+  margin: auto;
+}
+
+footer {
+  flex-shrink: 0;
+}
+
+.darker {
+  background-color: var(--strong);
+  color: var(--bg);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:visited {
+  color: var(--link-visited);
+}
+
+.darker>a:visited {
+  color: inherit;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
